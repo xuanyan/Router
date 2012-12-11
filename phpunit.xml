@@ -1,0 +1,5 @@
+<testsuites>
+  <testsuite name="My Test Suite">
+    <file>test/routerTest.php</file>
+  </testsuite>
+</testsuites>
