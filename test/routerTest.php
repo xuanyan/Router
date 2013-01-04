@@ -36,6 +36,13 @@ class routerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('abc', $this->router->run('admin/admin/test/a/b/c'));
     }
     
+    /**
+     * @expectedException RouterException
+     */
+    public function testSeven() {
+        $this->router->run('no_exists/no_exists');
+    }
+
     public function tearDown()
     {
         $this->router = null;
