@@ -103,8 +103,6 @@ class Router
             throw new RouterException("Controller not exists: {$this->controller}: $file", 404);
         }
 
-        include_once $file;
-
         $className = $this->controller . 'Controller';
 
         if (!class_exists($className, false)) {
