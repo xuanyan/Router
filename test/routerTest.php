@@ -51,6 +51,12 @@ class routerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('no_exists', $this->router->run('test/test/'.$this->router->controller));
         }
     }
+    
+    
+    public function testNine() {
+        $this->router->map('getUserName/:username', 'test/test/:username');
+        $this->assertEquals('xuanyan', $this->router->run('getUserName/xuanyan'));
+    }
 
     public function tearDown()
     {

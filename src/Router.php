@@ -15,6 +15,7 @@ class Router
     private $controllerDir = '';
     private $moduleDir = array();
     private $delimiter = '';
+    private $rules = array();
 
     public $format = '';
     public $module = '';
@@ -26,6 +27,18 @@ class Router
     {
         $this->controllerDir = $controllerDir;
         $this->delimiter = $delimiter;
+    }
+
+    public function map($from, $to)
+    {
+        if (preg_match_all('/:\w+/i', $from, $replacement)) {
+            $from = preg_replace('/:\w+/i', '([^/]+)', $from);
+        }
+        $this->rules[] = array(
+            'pattern' => '$'.$from.'$',
+            'replacement' => $replacement[0],
+            'subject' => $to
+        );
     }
 
     public function setModule($module, $controllerDir)
@@ -57,6 +70,19 @@ class Router
     public function run($url)
     {
         $url = trim($url, ' '.$this->delimiter);
+    
+        foreach ($this->rules as $key => $value) {
+            if (preg_match_all($value['pattern'], $url, $matches)) {
+                $replace_pairs = array();
+                if ($value['replacement']) {
+                    $replace_pairs = array_combine($value['replacement'], $matches[1]);
+                }
+                $value['subject'] = strtr($value['subject'], $replace_pairs);
+                unset($this->rules[$key]);
+
+                return $this->run($value['subject']);
+            }
+        }
 
         // trim the url extention (xxx/xxx.html or yyy/yyy.asp or any extention)
         if (($pos = strrpos($url, '.')) !== false) {
