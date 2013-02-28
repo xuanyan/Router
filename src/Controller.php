@@ -1,13 +1,14 @@
 <?php
 
 /*
-* Controller abstract class
+* Controller
 *
-* @copyright (c) 2012 Atom Projects More info http://Atom.com
+* @copyright (c) 2012 Atom Projects More info http://geek-zoo.com
 * @license http://opensource.org/licenses/gpl-2.0.php The GNU General Public License
-* @author xuanyan <yxuan@myspace.cn>
+* @author xuanyan <xuanyan@geek-zoo.com>
 *
 */
+
 
 abstract class Controller
 {

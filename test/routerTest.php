@@ -42,6 +42,15 @@ class routerTest extends PHPUnit_Framework_TestCase
     public function testSeven() {
         $this->router->run('no_exists/no_exists');
     }
+    
+    public function testEight() {
+        // catch not exists controller to do a time redirect controller
+        try {
+            $this->router->run('no_exists');
+        } catch (RouterException $e) {
+            $this->assertEquals('no_exists', $this->router->run('test/test/'.$this->router->controller));
+        }
+    }
 
     public function tearDown()
     {
