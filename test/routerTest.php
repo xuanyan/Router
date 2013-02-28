@@ -29,7 +29,7 @@ class routerTest extends PHPUnit_Framework_TestCase
     }
     
     public function testFive() {
-        $this->assertEquals('blog', $this->router->run('blog'));
+        $this->assertEquals('blog', $this->router->run('blog/blog'));
     }
 
     public function testSix() {

@@ -35,7 +35,7 @@ class Router
             $from = preg_replace('/:\w+/i', '([^/]+)', $from);
         }
         $this->rules[] = array(
-            'pattern' => '$'.$from.'$',
+            'pattern' => '$^'.$from.'$',
             'replacement' => $replacement[0],
             'subject' => $to
         );
@@ -97,7 +97,7 @@ class Router
         $module = current($tmp);
 
         if (isset($this->moduleDir[$module])) {
-            $this->module = $module;
+            $this->module = array_shift($tmp);
             $path = $this->moduleDir[$module];
         } else {
             $path = $this->controllerDir;
