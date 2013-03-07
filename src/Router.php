@@ -69,20 +69,7 @@ class Router
      */
     public function run($url)
     {
-        $url = trim($url, ' '.$this->delimiter);
-    
-        foreach ($this->rules as $key => $value) {
-            if (preg_match_all($value['pattern'], $url, $matches)) {
-                $replace_pairs = array();
-                if ($value['replacement']) {
-                    $replace_pairs = array_combine($value['replacement'], $matches[1]);
-                }
-                $value['subject'] = strtr($value['subject'], $replace_pairs);
-                unset($this->rules[$key]);
-
-                return $this->run($value['subject']);
-            }
-        }
+        $url = $raw_url = trim($url, ' '.$this->delimiter);
 
         // trim the url extention (xxx/xxx.html or yyy/yyy.asp or any extention)
         if (($pos = strrpos($url, '.')) !== false) {
@@ -100,6 +87,21 @@ class Router
             $this->module = array_shift($tmp);
             $path = $this->moduleDir[$module];
         } else {
+
+            // do rewrite
+            foreach ($this->rules as $key => $value) {
+                if (preg_match_all($value['pattern'], $raw_url, $matches)) {
+                    $replace_pairs = array();
+                    if ($value['replacement']) {
+                        $replace_pairs = array_combine($value['replacement'], $matches[1]);
+                    }
+                    $value['subject'] = strtr($value['subject'], $replace_pairs);
+                    unset($this->rules[$key]);
+
+                    return $this->run($value['subject']);
+                }
+            }
+
             $path = $this->controllerDir;
         }
 
