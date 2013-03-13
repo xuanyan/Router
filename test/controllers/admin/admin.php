@@ -1,6 +1,6 @@
 <?php
 
-class adminController extends Controller
+class adminController
 {
     function testAction($a, $b, $c)
     {
