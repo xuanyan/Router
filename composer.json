@@ -6,7 +6,6 @@
     "autoload": {
         "psr-0": {
                 "Router": "src",
-                "Controller" : "src"
         }
     }
 }
