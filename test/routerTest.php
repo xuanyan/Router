@@ -1,5 +1,7 @@
 <?php
 
+defined('__DIR__') || define('__DIR__', dirname(__FILE__));
+
 require_once dirname(__DIR__) . '/src/Router.php';
 
 class routerTest extends PHPUnit_Framework_TestCase
