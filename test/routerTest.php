@@ -63,6 +63,30 @@ class routerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('blog', $this->router->run('blog/blog'));
     }
 
+    public function testEleven() {
+        // catch not exists controller/Action , the exception code is 500
+        try {
+            $this->router->run('index/no_existsAction');
+        } catch (RouterException $e) {
+            $this->assertEquals('500', $e->getCode());
+        }
+    }
+
+    public function testTwelve() {
+        $this->router->map('index/:NUM', 'test/test/:NUM');
+        // not rewrite for string
+        $this->assertEquals('ok', $this->router->run('index/index'));
+        // do rewrite for :NUM
+        $this->assertEquals('2', $this->router->run('index/2'));
+    }
+
+    // test for more then 1 param rewrite
+    public function testThirteen() {
+        $this->router->map('index/:test/:id', 'test/:test/:id');
+        // test/test/test
+        $this->assertEquals('test', $this->router->run('index/test/test'));
+    }
+
     public function tearDown()
     {
         $this->router = null;

@@ -9,7 +9,6 @@
 *
 */
 
-
 class Router
 {
     private $controllerDir = '';
@@ -31,12 +30,14 @@ class Router
 
     public function map($from, $to)
     {
-        if (preg_match_all('/:\w+/i', $from, $replacement)) {
-            $from = preg_replace('/:\w+/i', '([^/]+)', $from);
+        if (preg_match_all('/:\w+/i', $from, $matches)) {
+            $pattern = array('/:NUM/', '/:\w+/i');
+            $replacement = array('(\d+)', '(\w+)');
+            $from = preg_replace($pattern, $replacement, $from);
         }
         $this->rules[] = array(
-            'pattern' => '$^'.$from.'$',
-            'replacement' => $replacement[0],
+            'pattern' => '%^'.$from.'$%',
+            'replacement' => $matches[0],
             'subject' => $to
         );
     }
@@ -90,10 +91,11 @@ class Router
 
             // do rewrite
             foreach ($this->rules as $key => $value) {
-                if (preg_match_all($value['pattern'], $raw_url, $matches)) {
+                if (preg_match_all($value['pattern'], $raw_url, $matches, PREG_SET_ORDER)) {
                     $replace_pairs = array();
                     if ($value['replacement']) {
-                        $replace_pairs = array_combine($value['replacement'], $matches[1]);
+                        array_shift($matches[0]);
+                        $replace_pairs = array_combine($value['replacement'], $matches[0]);
                     }
                     $value['subject'] = strtr($value['subject'], $replace_pairs);
                     unset($this->rules[$key]);
@@ -163,8 +165,13 @@ class Router
         } catch (Exception $e) {
             throw $e;
         }
+        $doAction = array($class, $actionName);
 
-        return call_user_func_array(array($class, $actionName), $tmp);
+        if (!is_callable($doAction, false)) {
+            throw new RouterException("Action not exists: {$this->action}: $file", 500);
+        }
+
+        return call_user_func_array($doAction, $tmp);
     }
 }
 
