@@ -18,8 +18,8 @@ class Router
 
     public $format = '';
     public $module = '';
-    public $controller = 'index';
-    public $action = 'index';
+    public $controller = '';
+    public $action = '';
     public $url = '';
 
     function __construct($controllerDir = 'Controllers', $delimiter = '/')
@@ -70,6 +70,7 @@ class Router
      */
     public function run($url)
     {
+        $this->action = $this->controller = 'index';
         $url = $raw_url = trim($url, ' '.$this->delimiter);
 
         // trim the url extention (xxx/xxx.html or yyy/yyy.asp or any extention)

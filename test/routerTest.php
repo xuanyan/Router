@@ -87,6 +87,15 @@ class routerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $this->router->run('index/test/test'));
     }
 
+    public function testFourteen() {
+        // catch not exists action to do a time redirect controller
+        try {
+            $this->router->run('index/66778');
+        } catch (RouterException $e) {
+            $this->assertEquals('ok', $this->router->run('index'));
+        }
+    }
+
     public function tearDown()
     {
         $this->router = null;
