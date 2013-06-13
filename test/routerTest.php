@@ -11,11 +11,11 @@ class routerTest extends PHPUnit_Framework_TestCase
         $this->router = new Router(__DIR__ . '/controllers');
         $this->router->setModule('blog', __DIR__ . '/blog');
     }
-
+    
     public function testOne() {
         $this->assertEquals('ok', $this->router->run('/'));
     }
-
+    
     public function testTwo() {
         $this->assertEquals('abc', $this->router->run('test/test/abc'));
     }
@@ -24,7 +24,7 @@ class routerTest extends PHPUnit_Framework_TestCase
         $_GET['a'] = 'abc';
         $this->assertEquals('abc', $this->router->run('test/test'));
     }
-
+    
     public function testFour() {
         $this->assertEquals('ok', $this->router->run('test'));
     }
@@ -32,7 +32,7 @@ class routerTest extends PHPUnit_Framework_TestCase
     public function testFive() {
         $this->assertEquals('blog', $this->router->run('blog/blog'));
     }
-
+    
     public function testSix() {
         $this->assertEquals('abc', $this->router->run('admin/admin/test/a/b/c'));
     }
@@ -52,17 +52,17 @@ class routerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('no_exists', $this->router->run('test/test/'.$this->router->controller));
         }
     }
-
+    
     public function testNine() {
         $this->router->map('getUserName/:username', 'test/test/:username');
         $this->assertEquals('xuanyan', $this->router->run('getUserName/xuanyan'));
     }
-
+    
     public function testTen() {
         $this->router->map('blog/:username', 'test/test/:username');
         $this->assertEquals('blog', $this->router->run('blog/blog'));
     }
-
+    
     public function testEleven() {
         // catch not exists controller/Action , the exception code is 500
         try {
@@ -71,7 +71,7 @@ class routerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('500', $e->getCode());
         }
     }
-
+    
     public function testTwelve() {
         $this->router->map('index/:NUM', 'test/test/:NUM');
         // not rewrite for string
@@ -79,20 +79,29 @@ class routerTest extends PHPUnit_Framework_TestCase
         // do rewrite for :NUM
         $this->assertEquals('2', $this->router->run('index/2'));
     }
-
+    
     // test for more then 1 param rewrite
     public function testThirteen() {
         $this->router->map('index/:test/:id', 'test/:test/:id');
         // test/test/test
         $this->assertEquals('test', $this->router->run('index/test/test'));
     }
-
+    
     public function testFourteen() {
         // catch not exists action to do a time redirect controller
         try {
             $this->router->run('index/66778');
         } catch (RouterException $e) {
             $this->assertEquals('ok', $this->router->run('index'));
+        }
+    }
+    
+    public function testFiveteen() {
+        // make controller run save, it was run only in controlerDir
+        try {
+            $this->router->run('../routerTest.php');
+        } catch (RouterException $e) {
+            $this->assertEquals('403', $e->getCode());
         }
     }
 

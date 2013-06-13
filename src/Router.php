@@ -22,6 +22,8 @@ class Router
     public $action = '';
     public $url = '';
 
+    public $controllerObj = null;
+
     function __construct($controllerDir = 'Controllers', $delimiter = '/')
     {
         $this->controllerDir = $controllerDir;
@@ -72,7 +74,7 @@ class Router
     {
         $this->action = $this->controller = 'index';
         $url = $raw_url = trim($url, ' '.$this->delimiter);
-
+        $this->module = '';
         // trim the url extention (xxx/xxx.html or yyy/yyy.asp or any extention)
         if (($pos = strrpos($url, '.')) !== false) {
             $this->format = substr($url, $pos+1);
@@ -82,11 +84,11 @@ class Router
         $this->url = $url;
 
         $tmp = $url ? array_filter(explode($this->delimiter, $url)) : array();
-
         $module = current($tmp);
-
         if (isset($this->moduleDir[$module])) {
+            
             $this->module = array_shift($tmp);
+            
             $path = $this->moduleDir[$module];
         } else {
 
@@ -110,7 +112,6 @@ class Router
 
         $count = count($tmp);
 
-
         for ($i = 0; $i < $count; $i++) {
             if (!is_dir($path.'/'.$tmp[$i])) {
                 break;
@@ -127,20 +128,28 @@ class Router
             }
         }
 
-        $file = $path.'/'.$this->controller.'.php';
-
-        $i && $tmp = array_slice($tmp, $i);
-        if (!file_exists($file)) {
-            throw new RouterException("Controller not exists: {$this->controller}: $file", 404);
-        }
+        $file = realpath($path.'/'.$this->controller.'.php');
 
         $className = $this->controller . 'Controller';
 
         if (!class_exists($className, false)) {
-            include $file;
+            if ($this->module && strpos($file, $this->moduleDir[$module]) !== 0) {
+                throw new RouterException("no permission to access: $file", 403);
+            } elseif (!$this->module && strpos($file, $this->controllerDir) !== 0) {
+                throw new RouterException("no permission to access: $file", 403);
+            } elseif (!file_exists($file)) {
+                throw new RouterException("Controller not exists: {$this->controller}: $file", 404);
+            } else {
+                include $file;
+            }
         }
 
+        $i && $tmp = array_slice($tmp, $i);
+
         $class = new $className($this);
+
+        $this->controllerObj = $class;
+
         $actionName = $this->action . 'Action';
 
         try {
