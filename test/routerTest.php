@@ -97,12 +97,19 @@ class routerTest extends PHPUnit_Framework_TestCase
     }
     
     public function testFiveteen() {
-        // make controller run save, it was run only in controlerDir
+        // make controller running save, it was run only in controlerDir
         try {
             $this->router->run('../routerTest.php');
         } catch (RouterException $e) {
             $this->assertEquals('403', $e->getCode());
         }
+    }
+
+    public function testSixteen(){
+        // change controller and action name
+        $this->router->controllerName = 'Action';
+        $this->router->actionName = '%s';
+        $this->assertEquals('Action::index', $this->router->run('action'));
     }
 
     public function tearDown()

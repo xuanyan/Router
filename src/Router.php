@@ -23,6 +23,8 @@ class Router
     public $url = '';
 
     public $controllerObj = null;
+    public $controllerName = '%sController';
+    public $actionName = '%sAction';
 
     function __construct($controllerDir = 'Controllers', $delimiter = '/')
     {
@@ -130,7 +132,7 @@ class Router
 
         $file = realpath($path.'/'.$this->controller.'.php');
 
-        $className = $this->controller . 'Controller';
+        $className = sprintf($this->controllerName, $this->controller);
 
         if (!class_exists($className, false)) {
             if ($this->module && strpos($file, $this->moduleDir[$module]) !== 0) {
@@ -150,7 +152,7 @@ class Router
 
         $this->controllerObj = $class;
 
-        $actionName = $this->action . 'Action';
+        $actionName = sprintf($this->actionName, $this->action);
 
         try {
             $method = new ReflectionMethod($class, $actionName);
