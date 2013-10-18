@@ -12,10 +12,16 @@ $router = new Router(__DIR__ . '/Controllers');
 
 $router->setModule('blog', __DIR__ . '/Blog/Controllers');
 
+
+// map blog/xuanyan  to blogdb/xuanyan
+$router->map('blog/:username', 'blogdb/:username');
+// if u just want to handler the number you could use :NUM
+$router->map('user/:NUM/profile', 'user/profile/:NUM');
+
+
 // run router
 // handle url like: http://example.com/?url=controller/action
 // sure, u can use rewrite to let the url seems better
-
 $router->run(@$_GET['url']);
 
 ```
