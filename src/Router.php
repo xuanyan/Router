@@ -157,7 +157,7 @@ class Router
         $actionName = sprintf($this->actionName, $this->action);
 
         try {
-            $method = new ReflectionMethod($class, $actionName);
+            $method = new \ReflectionMethod($class, $actionName);
             if ($method->getNumberOfParameters() > 0) {
                 $ps = array();
                 foreach($method->getParameters() as $i => $val)
@@ -174,9 +174,9 @@ class Router
                 }
                 return $method->invokeArgs($class, $ps);
             }
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
         $doAction = array($class, $actionName);
