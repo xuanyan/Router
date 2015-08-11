@@ -2,8 +2,11 @@
 
 ### How to use it
 
-```
+```php
+
 require_once __DIR__ . '/src/Router.php';
+
+use XuanYan\Router as Router;
 
 $router = new Router(__DIR__ . '/Controllers');
 
