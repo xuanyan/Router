@@ -1,5 +1,7 @@
 <?php
 
+namespace XuanYan;
+
 /*
 * Router
 *
