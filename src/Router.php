@@ -74,8 +74,12 @@ class Router
      * @param string $url
      * @return mix
      */
-    public function run($url)
+    public function run($url = null)
     {
+        if (!isset($url)) {
+            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+        }
+
         $this->action = $this->controller = 'index';
         $url = $raw_url = trim($url, ' '.$this->delimiter);
         $this->module = '';
