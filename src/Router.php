@@ -77,7 +77,7 @@ class Router
     public function run($url = null)
     {
         if (!isset($url)) {
-            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         }
 
         $this->action = $this->controller = 'index';
