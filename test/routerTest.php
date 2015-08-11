@@ -50,7 +50,7 @@ class routerTest extends PHPUnit_Framework_TestCase
         // catch not exists controller to do a time redirect controller
         try {
             $this->router->run('no_exists');
-        } catch (RouterException $e) {
+        } catch (XuanYan\RouterException $e) {
             $this->assertEquals('no_exists', $this->router->run('test/test/'.$this->router->controller));
         }
     }
@@ -69,7 +69,7 @@ class routerTest extends PHPUnit_Framework_TestCase
         // catch not exists controller/Action , the exception code is 500
         try {
             $this->router->run('index/no_existsAction');
-        } catch (RouterException $e) {
+        } catch (XuanYan\RouterException $e) {
             $this->assertEquals('500', $e->getCode());
         }
     }
@@ -93,7 +93,7 @@ class routerTest extends PHPUnit_Framework_TestCase
         // catch not exists action to do a time redirect controller
         try {
             $this->router->run('index/66778');
-        } catch (RouterException $e) {
+        } catch (XuanYan\RouterException $e) {
             $this->assertEquals('ok', $this->router->run('index'));
         }
     }
@@ -102,7 +102,7 @@ class routerTest extends PHPUnit_Framework_TestCase
         // make controller running save, it was run only in controlerDir
         try {
             $this->router->run('../routerTest.php');
-        } catch (RouterException $e) {
+        } catch (XuanYan\RouterException $e) {
             $this->assertEquals('403', $e->getCode());
         }
     }
