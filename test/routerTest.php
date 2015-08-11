@@ -40,7 +40,7 @@ class routerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException RouterException
+     * @expectedException XuanYan\RouterException
      */
     public function testSeven() {
         $this->router->run('no_exists/no_exists');
